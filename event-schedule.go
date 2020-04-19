@@ -14,9 +14,9 @@ var webClient = new(http.Client)
 
 // var eventLock = new(sync.RWMutex)
 // var eventCacheTime = new(time.Time)
-var eventsCache = make([]Event, 0, 200)
+var eventsCache EventSchedule
 
-func readEventCache() (map[string]Event, error) {
+func readEventCache() (EventSchedule, error) {
 	if len(eventsCache) == 0 {
 		err := updateEventCache()
 		if err != nil {
@@ -41,7 +41,8 @@ func updateEventCache() error {
 		log.Println("Unable to update event cache due to an error during parseSchedule: " + err.Error())
 		return err
 	} else {
-		log.Printf("I got %d events\n", len(*newEvents))
+		log.Printf("I got %d events\n", len(newEvents))
+		
 	}
 
 	return nil
