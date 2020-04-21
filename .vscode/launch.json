@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}",
+            "env": {},
+            "args": [
+                "--cache-timeout", "1",
+                "--allowed-origins", "*",
+                "--sheet-url", "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqFQ_57wfOI6gNj8ORyAGjrJQ5JwDguv6_0lWtdraKoPYr2_VgHtdHqF010vKt6K2JgOn92Q7zcjpX/pub?gid=0&single=true&output=csv"
+            ]
+        }
+    ]
+}

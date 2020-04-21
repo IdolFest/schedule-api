@@ -62,6 +62,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, mappin
 				log.Printf("Skipped event on line %d in room %s due to duplicate UID %s\n", lineNumber, room.roomName, event.ID)
 			} else {
 				roomEvents = append(roomEvents, event)
+				events[room.roomName] = roomEvents
 			}
 		}
 	}

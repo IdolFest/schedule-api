@@ -6,29 +6,29 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	// "sync"
+	"time"
 	// "os"
 )
 
-var webClient = new(http.Client)
+var webClient = http.Client{}
 
-// var eventLock = new(sync.RWMutex)
-// var eventCacheTime = new(time.Time)
+var eventCacheTime time.Time
 var eventsCache EventSchedule
 
-func readEventCache() (EventSchedule, error) {
-	if len(eventsCache) == 0 {
-		err := updateEventCache()
+func readEventCache(sheetUrl string, cacheTimeLength int) (EventSchedule, error) {
+	if time.Now().After(eventCacheTime) {
+		err := updateEventCache(sheetUrl, cacheTimeLength)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return nil, nil
+	return eventsCache, nil
 }
 
-func updateEventCache() error {
-	rawEvents, err := fetchRawEvents()
+func updateEventCache(sheetUrl string, cacheTimeLength int) error {
+
+	rawEvents, err := fetchRawEvents(sheetUrl)
 	if err != nil {
 		log.Println("Unable to update event cache due to an error during fetchRawEvents: " + err.Error())
 		return err
@@ -41,16 +41,15 @@ func updateEventCache() error {
 		log.Println("Unable to update event cache due to an error during parseSchedule: " + err.Error())
 		return err
 	} else {
-		log.Printf("I got %d events\n", len(newEvents))
-		
+		log.Printf("I got %d room\n", len(newEvents))
+		eventsCache = newEvents
+		eventCacheTime = time.Now().Add(time.Duration(cacheTimeLength) * time.Second)
 	}
 
 	return nil
 }
 
-func fetchRawEvents() ([]byte, error) {
-	// sheetUrl := os.Getenv("SHEET_URL")
-	sheetUrl := "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqFQ_57wfOI6gNj8ORyAGjrJQ5JwDguv6_0lWtdraKoPYr2_VgHtdHqF010vKt6K2JgOn92Q7zcjpX/pub?gid=0&single=true&output=tsv"
+func fetchRawEvents(sheetUrl string) ([]byte, error) {
 	log.Printf("Going to call out to the following sheets URL: %s\n", sheetUrl)
 
 	resp, err := webClient.Get(sheetUrl)

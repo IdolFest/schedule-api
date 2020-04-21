@@ -22,18 +22,16 @@ type roomMap struct {
 const roomMaxColumns = 4
 
 func (room *roomMap) isComplete() bool {
-	switch {
-	case room == nil:
-	case room.roomName == "":
-	case room.idColumn < 1:
-	case room.titleColumn < 1:
-	case room.panelistsColumn < 1:
-	case room.descColumn < 1:
+	if room == nil ||
+		room.roomName == "" ||
+		room.idColumn < 1 ||
+		room.titleColumn < 1 ||
+		room.panelistsColumn < 1 ||
+		room.descColumn < 1 {
 		return false
-	default:
+	} else {
 		return true
 	}
-	return true
 }
 
 func (room *roomMap) isSafelyReadable(columnCount int) bool {
@@ -66,9 +64,11 @@ func parseScheduleHeader(firstRecord []string, secondRecord []string) ([]roomMap
 	var roomStartAt int = 1
 
 	for i := 1; i < len(firstRecord); i++ {
-		switch {
-		case firstRecord[i] != "":
+		if firstRecord[i] != "" && thisRoom.roomName == "" {
 			thisRoom.roomName = firstRecord[i]
+		}
+
+		switch {
 		case strings.EqualFold(secondRecord[i], "ID"):
 			thisRoom.idColumn = i
 		case strings.EqualFold(secondRecord[i], "Title"):
@@ -77,8 +77,6 @@ func parseScheduleHeader(firstRecord []string, secondRecord []string) ([]roomMap
 			thisRoom.panelistsColumn = i
 		case strings.EqualFold(secondRecord[i], "Public Description"):
 			thisRoom.descColumn = i
-		default:
-			continue
 		}
 		if thisRoom.isComplete() {
 			roomMappings = append(roomMappings, thisRoom)
