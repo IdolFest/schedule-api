@@ -51,7 +51,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, mappin
 
 		// merge events that are longer than half-hour
 		if rl := len(roomEvents); rl > 0 {
-			prevEvent := roomEvents[rl-1]
+			prevEvent := &roomEvents[rl-1]
 			if prevEvent.SharesID(&event) {
 				prevEvent.EndTime = event.EndTime
 				continue
