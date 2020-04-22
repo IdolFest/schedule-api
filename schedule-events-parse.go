@@ -6,7 +6,7 @@ import (
 )
 
 
-func parseScheduleRow(lineNumber int, row []string, events EventSchedule, mapping []roomMap, eventLocation *time.Location) error {
+func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times *[]time.Time, mapping []roomMap, eventLocation *time.Location) error {
 	switch {
 	case row == nil:
 		return ErrArgumentNil{"row", "parseScheduleRow"}
@@ -26,6 +26,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, mappin
 	}
 	endTime := startTime.Add(time.Duration(30) * time.Minute)
 
+	*times = append(*times, startTime)
 	rowLen := len(row)
 	for _, room := range mapping {
 		if !room.isSafelyReadable(rowLen) {

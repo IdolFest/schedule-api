@@ -49,4 +49,5 @@ type EventSchedule map[string][]Event
 
 type Response struct {
 	Rooms EventSchedule `json:"rooms"`
+	Times []time.Time `json:"times"`
 }
