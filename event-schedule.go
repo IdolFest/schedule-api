@@ -15,16 +15,17 @@ var webClient = http.Client{}
 var eventCacheTime time.Time
 var eventsCache EventSchedule
 var timesCache []time.Time
+var roomOrderCache []string
 
-func readEventCache(sheetUrl string, cacheTimeLength int) (EventSchedule, []time.Time, error) {
+func readEventCache(sheetUrl string, cacheTimeLength int) (EventSchedule, []time.Time, []string, error) {
 	if time.Now().After(eventCacheTime) {
 		err := updateEventCache(sheetUrl, cacheTimeLength)
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 	}
 
-	return eventsCache, timesCache, nil
+	return eventsCache, timesCache, roomOrderCache, nil
 }
 
 func updateEventCache(sheetUrl string, cacheTimeLength int) error {
@@ -37,7 +38,7 @@ func updateEventCache(sheetUrl string, cacheTimeLength int) error {
 
 	reader := csv.NewReader(bytes.NewReader(rawEvents))
 
-	newEvents, newTimes, err := parseSchedule(reader)
+	newEvents, newTimes, newRoomOrder, err := parseSchedule(reader)
 	if err != nil {
 		log.Println("Unable to update event cache due to an error during parseSchedule: " + err.Error())
 		return err
@@ -45,6 +46,7 @@ func updateEventCache(sheetUrl string, cacheTimeLength int) error {
 		log.Printf("I got %d room\n", len(newEvents))
 		eventsCache = newEvents
 		timesCache = newTimes
+		roomOrderCache = newRoomOrder
 		eventCacheTime = time.Now().Add(time.Duration(cacheTimeLength) * time.Second)
 	}
 

@@ -48,6 +48,7 @@ func (this *Event) HasID(id string) bool {
 type EventSchedule map[string][]Event
 
 type Response struct {
-	Rooms EventSchedule `json:"rooms"`
-	Times []time.Time `json:"times"`
+	Rooms     EventSchedule `json:"rooms"`
+	RoomOrder []string      `json:"roomOrder"`
+	Times     []time.Time   `json:"times"`
 }

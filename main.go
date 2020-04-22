@@ -38,7 +38,7 @@ func main() {
 		os.Exit(2)
 	}
 	http.HandleFunc("/schedule/", func(writer http.ResponseWriter, request *http.Request) {
-		sched, times, err := readEventCache(c.sheetUrl, c.cacheTimeout)
+		sched, times, order, err := readEventCache(c.sheetUrl, c.cacheTimeout)
 		if err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(writer, "Unable to complete request")
@@ -49,7 +49,7 @@ func main() {
 		writer.Header().Add("Access-Control-Allow-Origin", c.allowedOrigins)
 
 		enc := json.NewEncoder(writer)
-		_ = enc.Encode(Response{Rooms: sched, Times: times})
+		_ = enc.Encode(Response{Rooms: sched, Times: times, RoomOrder: order})
 	})
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte("ok"))
