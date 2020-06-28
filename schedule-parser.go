@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-func parseSchedule(reader *csv.Reader) (map[string][]Event, []time.Time, []string, error) {
-	eventLocation, _ := time.LoadLocation("America/New_York")
+func parseSchedule(reader *csv.Reader, timezone string) (map[string][]Event, []time.Time, []string, error) {
+	eventLocation, _ := time.LoadLocation(timezone)
 
 	rowOne, err := reader.Read()
 	if err != nil {
