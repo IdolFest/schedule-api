@@ -37,7 +37,7 @@ func main() {
 		log.Println(err)
 		os.Exit(2)
 	}
-	http.HandleFunc("/schedule/", func(writer http.ResponseWriter, request *http.Request) {
+	http.HandleFunc("/schedule", func(writer http.ResponseWriter, request *http.Request) {
 		sched, times, order, err := readEventCache(c.sheetUrl, c.cacheTimeout)
 		if err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
@@ -50,6 +50,9 @@ func main() {
 
 		enc := json.NewEncoder(writer)
 		_ = enc.Encode(Response{Rooms: sched, Times: times, RoomOrder: order})
+	})
+	http.HandleFunc("/schedule/", func(writer http.ResponseWriter, request *http.Request) {
+		http.Redirect(writer, request, "/schedule", http.StatusMovedPermanently)
 	})
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte("ok"))
