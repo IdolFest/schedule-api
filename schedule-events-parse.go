@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
+	"strings"
 	"time"
 )
-
 
 func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times *[]time.Time, mapping []roomMap, eventLocation *time.Location) error {
 	switch {
@@ -48,6 +48,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times 
 			Title:       row[room.titleColumn],
 			Panelists:   row[room.panelistsColumn],
 			Description: row[room.descColumn],
+			IsZoom:      strings.EqualFold(row[room.isZoomColumn], "yes"),
 		}
 
 		// merge events that are longer than half-hour

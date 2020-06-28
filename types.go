@@ -21,6 +21,7 @@ type Event struct {
 	Title       string    `json:"title"`
 	Panelists   string    `json:"panelists"`
 	Description string    `json:"description"`
+	IsZoom      bool      `json:"isZoom"`
 }
 
 func (this *Event) IsValid() bool {

@@ -17,9 +17,10 @@ type roomMap struct {
 	titleColumn     int
 	panelistsColumn int
 	descColumn      int
+	isZoomColumn    int
 }
 
-const roomMaxColumns = 4
+const roomMaxColumns = 5
 
 func (room *roomMap) isComplete() bool {
 	if room == nil ||
@@ -27,7 +28,8 @@ func (room *roomMap) isComplete() bool {
 		room.idColumn < 1 ||
 		room.titleColumn < 1 ||
 		room.panelistsColumn < 1 ||
-		room.descColumn < 1 {
+		room.descColumn < 1 ||
+		room.isZoomColumn < 1 {
 		return false
 	} else {
 		return true
@@ -39,7 +41,8 @@ func (room *roomMap) isSafelyReadable(columnCount int) bool {
 		room.idColumn < columnCount &&
 		room.titleColumn < columnCount &&
 		room.panelistsColumn < columnCount &&
-		room.descColumn < columnCount
+		room.descColumn < columnCount &&
+		room.isZoomColumn < columnCount
 }
 
 func parseScheduleHeader(firstRecord []string, secondRecord []string) ([]roomMap, error) {
@@ -77,6 +80,8 @@ func parseScheduleHeader(firstRecord []string, secondRecord []string) ([]roomMap
 			thisRoom.panelistsColumn = i
 		case strings.EqualFold(secondRecord[i], "Public Description"):
 			thisRoom.descColumn = i
+		case strings.EqualFold(secondRecord[i], "Is Zoom"):
+			thisRoom.isZoomColumn = i
 		}
 		if thisRoom.isComplete() {
 			roomMappings = append(roomMappings, thisRoom)
