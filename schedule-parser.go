@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func parseSchedule(reader *csv.Reader, timezone string) (map[string][]Event, []time.Time, []string, error) {
+func parseSchedule(reader *csv.Reader, rowLength time.Duration, timezone string) (map[string][]Event, []time.Time, []string, error) {
 	eventLocation, _ := time.LoadLocation(timezone)
 
 	rowOne, err := reader.Read()
@@ -49,7 +49,7 @@ func parseSchedule(reader *csv.Reader, timezone string) (map[string][]Event, []t
 			log.Println("Unable to complete parsing of schedule due to error: " + err.Error())
 			return nil, nil, nil, err
 		}
-		err = parseScheduleRow(lineNumber, row, events, &times, mapping, eventLocation)
+		err = parseScheduleRow(lineNumber, row, events, &times, mapping, rowLength, eventLocation)
 		if err != nil {
 			log.Println("Unable to complete parsing of schedule due to error: " + err.Error())
 			return nil, nil, nil, err

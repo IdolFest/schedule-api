@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times *[]time.Time, mapping []roomMap, eventLocation *time.Location) error {
+func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times *[]time.Time, mapping []roomMap, rowLength time.Duration, eventLocation *time.Location) error {
 	switch {
 	case row == nil:
 		return ErrArgumentNil{"row", "parseScheduleRow"}
@@ -24,7 +24,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times 
 		log.Printf("Skipping line %d due to date parse error: %s\n", lineNumber, err.Error())
 		return nil
 	}
-	endTime := startTime.Add(time.Duration(30) * time.Minute)
+	endTime := startTime.Add(rowLength)
 
 	*times = append(*times, startTime)
 	rowLen := len(row)

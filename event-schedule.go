@@ -17,9 +17,9 @@ var eventsCache EventSchedule
 var timesCache []time.Time
 var roomOrderCache []string
 
-func readEventCache(sheetUrl string, cacheTimeLength int, timezone string) (EventSchedule, []time.Time, []string, error) {
+func readEventCache(sheetUrl string, cacheTimeLength int, rowLength time.Duration, timezone string) (EventSchedule, []time.Time, []string, error) {
 	if time.Now().After(eventCacheTime) {
-		err := updateEventCache(sheetUrl, cacheTimeLength, timezone)
+		err := updateEventCache(sheetUrl, cacheTimeLength, rowLength, timezone)
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -28,7 +28,7 @@ func readEventCache(sheetUrl string, cacheTimeLength int, timezone string) (Even
 	return eventsCache, timesCache, roomOrderCache, nil
 }
 
-func updateEventCache(sheetUrl string, cacheTimeLength int, timezone string) error {
+func updateEventCache(sheetUrl string, cacheTimeLength int, rowLength time.Duration, timezone string) error {
 
 	rawEvents, err := fetchRawEvents(sheetUrl)
 	if err != nil {
@@ -38,7 +38,7 @@ func updateEventCache(sheetUrl string, cacheTimeLength int, timezone string) err
 
 	reader := csv.NewReader(bytes.NewReader(rawEvents))
 
-	newEvents, newTimes, newRoomOrder, err := parseSchedule(reader, timezone)
+	newEvents, newTimes, newRoomOrder, err := parseSchedule(reader, rowLength, timezone)
 	if err != nil {
 		log.Println("Unable to update event cache due to an error during parseSchedule: " + err.Error())
 		return err

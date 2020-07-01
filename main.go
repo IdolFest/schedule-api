@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type config struct {
@@ -16,6 +17,7 @@ type config struct {
 	cacheTimeout   int
 	allowedOrigins string
 	timezone       string
+	rowMinutes     int
 }
 
 func parseFlags() (config, error) {
@@ -25,6 +27,7 @@ func parseFlags() (config, error) {
 	flag.StringVar(&c.allowedOrigins, "allowed-origins", "", "The set of Origins that should be returned for requests.")
 	flag.StringVar(&c.sheetUrl, "sheet-url", "", "The URL of the published Schedule Spreadsheet. Expected response is in CSV format.")
 	flag.StringVar(&c.timezone, "timezone", "America/New_York", "The timezome to assume for the spreadsheet")
+	flag.IntVar(&c.rowMinutes, "row-minutes", 30, "The number of minutes represented by one row.")
 	flag.Parse()
 
 	if c.sheetUrl == "" {
@@ -40,7 +43,7 @@ func main() {
 		os.Exit(2)
 	}
 	http.HandleFunc("/schedule", func(writer http.ResponseWriter, request *http.Request) {
-		sched, times, order, err := readEventCache(c.sheetUrl, c.cacheTimeout, c.timezone)
+		sched, times, order, err := readEventCache(c.sheetUrl, c.cacheTimeout, time.Duration(c.rowMinutes)*time.Minute, c.timezone)
 		if err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(writer, "Unable to complete request")
