@@ -23,6 +23,10 @@ as well as all the other PonyFest tools that consume schedule inforamtion.
 
 ## Google Sheet format
 
+The tool expects to consume the CSV format of a Google Sheet. To create this, go to File -> Share ->
+Publish To Web, then select the relevant sheet and set the format to "Comma-separated values (.csv)".
+Provide the URL Sheets provides you with to `--sheet-url` - it should end with `&output=csv`.
+
 The google sheet is expected to have two header rows: one with the room name, and a second that
 contains repeating column headers for each room. Currently, the per-room columns must be:
 
