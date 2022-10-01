@@ -35,7 +35,7 @@ contains repeating column headers for each room. Currently, the per-room columns
 * `Title` - The title of the event
 * `Panelists` - The panelists for the event
 * `Public Description` - A public description of the event
-* `Is Zoom` - Whether the event is taking place via Zoom.
+* `Is Guest`.
 
 Additionally, one column on the left must contain the event times. in YYYY-MM-DD HH:MM format. Each
 row must represent a consistent length of time.

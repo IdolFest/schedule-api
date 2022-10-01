@@ -21,7 +21,8 @@ type Event struct {
 	Title       string    `json:"title"`
 	Panelists   string    `json:"panelists"`
 	Description string    `json:"description"`
-	IsZoom      bool      `json:"isZoom"`
+	IsGuest     bool      `json:"isGuest"`
+	Room        string    `json:"room,omitempty"`
 }
 
 func (this *Event) IsValid() bool {
@@ -52,4 +53,9 @@ type Response struct {
 	Rooms     EventSchedule `json:"rooms"`
 	RoomOrder []string      `json:"roomOrder"`
 	Times     []time.Time   `json:"times"`
+}
+
+type ResponseByTime struct {
+	Times     map[time.Time][]Event `json:"times"`
+	RoomOrder []string              `json:"roomOrder"`
 }

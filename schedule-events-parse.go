@@ -19,7 +19,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times 
 	}
 
 	// parse the time
-	startTime, err := time.ParseInLocation("2006-01-02 15:04", row[0], eventLocation)
+	startTime, err := time.ParseInLocation("2006-01-02 3:04 PM", row[0], eventLocation)
 	if err != nil {
 		log.Printf("Skipping line %d due to date parse error: %s\n", lineNumber, err.Error())
 		return nil
@@ -48,7 +48,7 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times 
 			Title:       row[room.titleColumn],
 			Panelists:   row[room.panelistsColumn],
 			Description: row[room.descColumn],
-			IsZoom:      strings.EqualFold(row[room.isZoomColumn], "yes"),
+			IsGuest:     strings.EqualFold(row[room.isGuestColumn], "yes"),
 		}
 
 		// merge events that are longer than half-hour
