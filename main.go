@@ -81,6 +81,30 @@ func main() {
 		_ = enc.Encode(ResponseByTime{Times: times, RoomOrder: order[2:]})
 	})
 
+	http.HandleFunc("/schedule-by-id", func(writer http.ResponseWriter, request *http.Request) {
+		sched, _, order, err := readEventCache(c.sheetUrl, c.cacheTimeout, time.Duration(c.rowMinutes)*time.Minute, c.timezone)
+		if err != nil {
+			writer.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(writer, "Unable to complete request")
+			return
+		}
+
+		writer.Header().Add("Content-Type", "application/json")
+		writer.Header().Add("Access-Control-Allow-Origin", c.allowedOrigins)
+
+		id := map[string][]Event{}
+
+		for room, events := range sched {
+			for _, event := range events {
+				event.Room = room
+				id[event.ID] = append(id[event.ID], event)
+			}
+		}
+
+		enc := json.NewEncoder(writer)
+		_ = enc.Encode(ResponseById{Events: id, RoomOrder: order[2:]})
+	})
+
 	http.HandleFunc("/schedule/", func(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "/schedule", http.StatusMovedPermanently)
 	})

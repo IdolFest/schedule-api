@@ -59,3 +59,8 @@ type ResponseByTime struct {
 	Times     map[time.Time][]Event `json:"times"`
 	RoomOrder []string              `json:"roomOrder"`
 }
+
+type ResponseById struct {
+	Events     map[string][]Event `json:"events"`
+	RoomOrder []string              `json:"roomOrder"`
+}
