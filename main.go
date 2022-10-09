@@ -92,12 +92,12 @@ func main() {
 		writer.Header().Add("Content-Type", "application/json")
 		writer.Header().Add("Access-Control-Allow-Origin", c.allowedOrigins)
 
-		id := map[string][]Event{}
+		id := map[string]Event{}
 
 		for room, events := range sched {
 			for _, event := range events {
 				event.Room = room
-				id[event.ID] = append(id[event.ID], event)
+				id[event.ID] = event
 			}
 		}
 

@@ -61,6 +61,6 @@ type ResponseByTime struct {
 }
 
 type ResponseById struct {
-	Events     map[string][]Event `json:"events"`
+	Events     map[string]Event `json:"events"`
 	RoomOrder []string              `json:"roomOrder"`
 }
