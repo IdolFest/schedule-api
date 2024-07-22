@@ -18,9 +18,11 @@ type roomMap struct {
 	panelistsColumn int
 	descColumn      int
 	isGuestColumn   int
+	recordingColumn int 
+	callMixColumn   int
 }
 
-const roomMaxColumns = 5
+const roomMaxColumns = 7
 
 func (room *roomMap) isComplete() bool {
 	if room == nil ||
@@ -29,7 +31,9 @@ func (room *roomMap) isComplete() bool {
 		room.titleColumn < 1 ||
 		room.panelistsColumn < 1 ||
 		room.descColumn < 1 ||
-		room.isGuestColumn < 1 {
+		room.isGuestColumn < 1 || 
+		room.recordingColumn < 1 ||
+		room.callMixColumn < 1 {
 		return false
 	} else {
 		return true
@@ -42,7 +46,9 @@ func (room *roomMap) isSafelyReadable(columnCount int) bool {
 		room.titleColumn < columnCount &&
 		room.panelistsColumn < columnCount &&
 		room.descColumn < columnCount &&
-		room.isGuestColumn < columnCount
+		room.isGuestColumn < columnCount &&
+		room.recordingColumn < columnCount && 
+		room.callMixColumn < columnCount
 }
 
 func parseScheduleHeader(firstRecord []string, secondRecord []string) ([]roomMap, error) {
@@ -82,6 +88,10 @@ func parseScheduleHeader(firstRecord []string, secondRecord []string) ([]roomMap
 			thisRoom.descColumn = i
 		case strings.EqualFold(secondRecord[i], "Is Guest"):
 			thisRoom.isGuestColumn = i
+		case strings.EqualFold(secondRecord[i], "Recording Allowed"):
+			thisRoom.recordingColumn = i
+		case strings.EqualFold(secondRecord[i], "Call/Mix Allowed"):
+			thisRoom.callMixColumn = i	
 		}
 		if thisRoom.isComplete() {
 			roomMappings = append(roomMappings, thisRoom)

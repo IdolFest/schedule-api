@@ -49,6 +49,8 @@ func parseScheduleRow(lineNumber int, row []string, events EventSchedule, times 
 			Panelists:   row[room.panelistsColumn],
 			Description: row[room.descColumn],
 			IsGuest:     strings.EqualFold(row[room.isGuestColumn], "yes"),
+            Recording:   row[room.recordingColumn],
+            CallMix:     row[room.callMixColumn],
 		}
 
 		// merge events that are longer than half-hour

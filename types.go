@@ -23,6 +23,8 @@ type Event struct {
 	Description string    `json:"description"`
 	IsGuest     bool      `json:"isGuest"`
 	Room        string    `json:"room,omitempty"`
+	Recording   string    `json:"recording"`
+	CallMix     string    `json:"callMix"`
 }
 
 func (this *Event) IsValid() bool {
