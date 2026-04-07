@@ -42,3 +42,13 @@ row must represent a consistent length of time.
 
 As a sample,
 [this was the schedule for PonyFest Online! 4.0](https://docs.google.com/spreadsheets/d/1UHjn4SEqcmZjfXd1VoHLzP1UG0HFO5BKMpFFxLsjzyY/edit?usp=sharing), which rendered to [this JSON](https://ponyfest.horse/4.0/schedule.json).
+
+## Updating Spreadsheet URL
+Connect to the EC2 instance through the AWS console and navigate to `/etc/systemd/system`
+Edit the `schedule-api.service` text file with vim or nano and replace the exported csv url
+Save the file and exit.
+Run the following commands:
+```
+sudo systemctl daemon-reload
+sudo systemctl restart schedule-api.service
+```
